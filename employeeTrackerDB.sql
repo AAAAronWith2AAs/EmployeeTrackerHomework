@@ -1,15 +1,3 @@
--- * **department**:
-
---   * **id** - INT PRIMARY KEY
---   * **name** - VARCHAR(30) to hold department name
-
--- * **role**:
-
---   * **id** - INT PRIMARY KEY
---   * **title** -  VARCHAR(30) to hold role title
---   * **salary** -  DECIMAL to hold role salary
---   * **department_id** -  INT to hold reference to department role belongs to
-
 -- * **employee**:
 
 --   * **id** - INT PRIMARY KEY
@@ -28,4 +16,29 @@ CREATE TABLE employee (
     lastName VARCHAR(30),
     roleId INTEGER NOT NULL,
     managerId INTEGER
-)
+);
+
+-- * **department**:
+
+--   * **id** - INT PRIMARY KEY
+--   * **name** - VARCHAR(30) to hold department name
+CREATE TABLE department (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30),
+
+);
+
+-- * **role**:
+
+--   * **id** - INT PRIMARY KEY
+--   * **title** -  VARCHAR(30) to hold role title
+--   * **salary** -  DECIMAL to hold role salary
+--   * **department_id** -  INT to hold reference to department role belongs to
+
+CREATE TABLE role (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(30),
+    salary DECIMAL (5,2),
+    departmentId INTEGER,
+
+);
