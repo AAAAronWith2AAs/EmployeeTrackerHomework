@@ -14,8 +14,12 @@ CREATE TABLE employee (
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(30),
     lastName VARCHAR(30),
-    roleId INTEGER NOT NULL,
-    managerId INTEGER
+    roleId INTEGER NOT NULL, 
+    INDEX roleIndex(roleId),
+    CONSTRAINT FKrole FOREIGN KEY(roleId) REFERENCES role(id) ON DELETE CASCADE
+    managerId INTEGER NULL,
+    INDEX managerIndex(managerId),
+    CONSTRAINT FKmanager FOREIGN KEY(managerId) REFERENCES employee(id) ON DELETE SET NULL
 );
 
 -- * **department**:
@@ -38,7 +42,9 @@ CREATE TABLE department (
 CREATE TABLE role (
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30),
-    salary DECIMAL (5,2),
+    salary DECIMAL,
     departmentId INTEGER,
+    INDEX department_id(departmentId),
+    CONSTRAINT FKdepartment FOREIGN KEY(departmentId) REFERENCES department(id) ON DELETE CASCADE
 
 );
