@@ -12,11 +12,11 @@ const connection = mysql.createConnection({
 init();
 
 function init() {
-  menu();
+  mainMenu();
 }
 
-async function menu() {
-  const menu = await prompt([
+async function mainMenu() {
+  const mainMenu = await prompt([
     {
       type: "list",
       name: "menu",
@@ -35,6 +35,14 @@ async function menu() {
         //   value: "view_employees_manager"
         // },
         {
+          name: "View Roles",
+          value: "view_roles",
+        },
+        {
+          name: "View All Departments",
+          value: "view_departments",
+        },
+        {
           name: "Add Employees",
           value: "add_employees",
         },
@@ -43,16 +51,8 @@ async function menu() {
         //   value: "view_employees"
         // },
         {
-          name: "View Roles",
-          value: "view_roles",
-        },
-        {
           name: "Add Roles",
           value: "add_roles",
-        },
-        {
-          name: "View All Departments",
-          value: "view_departments",
         },
         {
           name: "Add Departments",
@@ -68,26 +68,26 @@ async function menu() {
         },
       ],
     },
-  ]);
-
-  switch (menu) {
-    case "view_employees":
-      return viewEmployees();
-    case "add_employees":
-      return addEmployees();
-    case "view_roles":
-      return viewRoles();
-    case "add_roles":
-      return addRoles();
-    case "view_departments":
-      return viewDepartments();
-    case "add_departments":
-      return addDepartments();
-    case "update_employee_roles":
-      return updateRoles();
-    case "quit":
-      return quit();
-  }
+  ]).then((response) => {
+    switch (response.mainMenu) {
+      case "view_employees":
+        return viewEmployees();
+      case "add_employees":
+        return addEmployees();
+      case "view_roles":
+        return viewRoles();
+      case "add_roles":
+        return addRoles();
+      case "view_departments":
+        return viewDepartments();
+      case "add_departments":
+        return addDepartments();
+      case "update_employee_roles":
+        return updateRoles();
+      case "quit":
+        quit();
+    }
+  });
 }
 
 //Add departments, roles, employees
@@ -103,7 +103,38 @@ function addEmployees() {
 
 //View departments, roles, employees
 function viewDepartments() {
-  inquirer.prompt();
+  connection.query("SELECT dept_name FROM department", (err, res) => {
+    if (err) throw err;
+
+    inquirer
+      .prompt([
+        {
+          type: "rawlist",
+          message: "For which department do you wish to obtain info?",
+          choices() {
+            const deptArray = [];
+            res.forEach(({ dept_name }) => {
+              deptArray.push(dept_name);
+            });
+            return deptArray;
+          },
+          name: "deptChoice",
+        },
+      ])
+      .then((response) => {
+        //query DB for relevant results to display
+        connection.query(
+          `SELECT first_name, last_name, title, MANAGER_ID, salary, dept_name FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE dept_name = "${response.deptChoice}"`,
+          (err, res) => {
+            if (err) throw err;
+            const table = cTable.getTable(res);
+            console.log(table);
+
+            mainMenu();
+          }
+        );
+      });
+  });
 }
 function viewRoles() {
   inquirer.prompt();
@@ -128,6 +159,10 @@ function updateRoles() {
 }
 function updateEmployees() {
   inquirer.prompt();
+}
+
+function quit() {
+  connection.end;
 }
 
 //-----------bottom--------------//
