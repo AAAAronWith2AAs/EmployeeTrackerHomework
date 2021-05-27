@@ -1,14 +1,6 @@
-const mysql = require("mysql");
 const { prompt } = require("inquirer");
 const { printTable } = require("console-table-printer");
-
-const connection = mysql.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "password",
-  database: "employeeTrackerDB",
-});
+const db = require("./db/db");
 
 init();
 
@@ -100,14 +92,9 @@ async function mainMenu() {
 
 //View departments, roles, employees
 async function viewEmployees() {
-  const employees = await connection.query(
-    "SELECT employee.id, employee.firstName, employee.lastName, role.title, department.name AS department, role.salary, CONCAT(manager.firstName, ' ', manager.lastName) AS manager FROM employee LEFT JOIN role on employee.roleId = role.id LEFT JOIN department on role.departmentId = department.id LEFT JOIN employee manager on manager.id = employee.managerId",
-    (err, res) => {
-      if (err) throw err;
-      console.log("\n");
-      printTable(results);
-    }
-  );
+  const employees = await db.findAllEmployees();
+  console.log("\n");
+  printTable(employees);
 
   mainMenu();
 }
@@ -174,6 +161,3 @@ function updateEmployees() {
 }
 
 //-----------bottom--------------//
-connection.connect((err) => {
-  if (err) throw err;
-});
