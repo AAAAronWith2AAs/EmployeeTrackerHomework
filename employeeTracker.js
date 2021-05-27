@@ -71,38 +71,46 @@ async function mainMenu() {
   ]).then((data) => {
     switch (data.mainMenu) {
       case "view_employees":
-        return viewEmployees();
+        viewEmployees();
+        break;
+      case "view_roles":
+        viewRoles();
+        break;
+      case "view_departments":
+        viewDepartments();
         break;
       case "add_employees":
-        return addEmployees();
-      case "view_roles":
-        return viewRoles();
+        addEmployees();
+        break;
       case "add_roles":
-        return addRoles();
-      case "view_departments":
-        return viewDepartments();
+        addRoles();
+        break;
       case "add_departments":
-        return addDepartments();
+        addDepartments();
+        break;
       case "update_employee_roles":
-        return updateRoles();
+        updateRoles();
+        break;
       case "exit":
         connection.end();
     }
   });
 }
 
-//Add departments, roles, employees
-function addDepartments() {
-  inquirer.prompt();
-}
-function addRoles() {
-  inquirer.prompt();
-}
-function addEmployees() {
-  inquirer.prompt();
+//View departments, roles, employees
+async function viewEmployees() {
+  const employees = await connection.query(
+    "SELECT employee.id, employee.firstName, employee.lastName, role.title, department.name AS department, role.salary, CONCAT(manager.firstName, ' ', manager.lastName) AS manager FROM employee LEFT JOIN role on employee.roleId = role.id LEFT JOIN department on role.departmentId = department.id LEFT JOIN employee manager on manager.id = employee.managerId",
+    (err, res) => {
+      if (err) throw err;
+      console.log("\n");
+      printTable(results);
+    }
+  );
+
+  mainMenu();
 }
 
-//View departments, roles, employees
 function viewDepartments() {
   connection.query("SELECT dept_name FROM department", (err, res) => {
     if (err) throw err;
@@ -140,14 +148,16 @@ function viewDepartments() {
 function viewRoles() {
   inquirer.prompt();
 }
-async function viewEmployees() {
-  const employees = await connection.query(
-    "SELECT employee.id, employee.firstName, employee.lastName, role.title, department.name AS department, role.salary, CONCAT(manager.firstName, ' ', manager.lastName) AS manager FROM employee LEFT JOIN role on employee.roleId = role.id LEFT JOIN department on role.departmentId = department.id LEFT JOIN employee manager on manager.id = employee.managerId;"
-  );
-  console.log("view employees");
-  console.log("\n");
-  console.table(employees);
-  menu();
+
+//Add departments, roles, employees
+function addDepartments() {
+  inquirer.prompt();
+}
+function addRoles() {
+  inquirer.prompt();
+}
+function addEmployees() {
+  inquirer.prompt();
 }
 
 //Update employee roles

@@ -15,11 +15,11 @@ CREATE TABLE employee (
     firstName VARCHAR(30),
     lastName VARCHAR(30),
     roleId INTEGER NOT NULL, 
-    INDEX roleIndex(roleId),
-    CONSTRAINT FKrole FOREIGN KEY(roleId) REFERENCES role(id) ON DELETE CASCADE
+  --  INDEX roleIndex(roleId),
+  --  CONSTRAINT FKrole FOREIGN KEY(roleId) REFERENCES role(id) ON DELETE CASCADE
     managerId INTEGER NULL,
-    INDEX managerIndex(managerId),
-    CONSTRAINT FKmanager FOREIGN KEY(managerId) REFERENCES employee(id) ON DELETE SET NULL
+  --  INDEX managerIndex(managerId),
+    --CONSTRAINT FKmanager FOREIGN KEY(managerId) REFERENCES employee(id) ON DELETE SET NULL
 );
 
 -- * **department**:
@@ -48,3 +48,21 @@ CREATE TABLE role (
     CONSTRAINT FKdepartment FOREIGN KEY(departmentId) REFERENCES department(id) ON DELETE CASCADE
 
 );
+
+USE employeeTrackerDB;
+
+INSERT INTO employee (firstName, lastName, roleId, managerId)
+VALUES 
+("aaron", "mendoza", 1),
+("alexis", "welch", 2),
+("bob", "levy", 3);
+
+INSERT INTO department (name)
+VALUES 
+("Sales"),
+("Engineering"),
+("Finance");
+
+INSERT INTO role (title, salary, departmentId)
+VALUES 
+();
