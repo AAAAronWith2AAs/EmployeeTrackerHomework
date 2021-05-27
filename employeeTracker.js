@@ -19,7 +19,7 @@ async function mainMenu() {
   const mainMenu = await prompt([
     {
       type: "list",
-      name: "menu",
+      name: "mainMenu",
       message: "What would you like to do?",
       choices: [
         {
@@ -63,15 +63,16 @@ async function mainMenu() {
           value: "update_employee_roles",
         },
         {
-          name: "Quit",
-          value: "quit",
+          name: "Exit",
+          value: "exit",
         },
       ],
     },
-  ]).then((response) => {
-    switch (response.mainMenu) {
+  ]).then((data) => {
+    switch (data.mainMenu) {
       case "view_employees":
         return viewEmployees();
+        break;
       case "add_employees":
         return addEmployees();
       case "view_roles":
@@ -84,8 +85,8 @@ async function mainMenu() {
         return addDepartments();
       case "update_employee_roles":
         return updateRoles();
-      case "quit":
-        quit();
+      case "exit":
+        connection.end();
     }
   });
 }
@@ -159,10 +160,6 @@ function updateRoles() {
 }
 function updateEmployees() {
   inquirer.prompt();
-}
-
-function quit() {
-  connection.end;
 }
 
 //-----------bottom--------------//
