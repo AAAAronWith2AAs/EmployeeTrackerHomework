@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const { prompt } = require("inquirer");
+const { printTable } = require("console-table-printer");
 
 const connection = mysql.createConnection({
   host: "localhost",
