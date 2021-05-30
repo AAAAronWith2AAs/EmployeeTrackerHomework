@@ -1,5 +1,10 @@
 USE employees;
 
+INSERT INTO employee (firstName, lastName, roleId, managerId)
+VALUES 
+("aaron", "mendoza", 1, NULL),
+("alexis", "welch", 2, NULL),
+("bob", "levy", 3, NULL);
 
 INSERT INTO department (name)
 VALUES 
@@ -14,8 +19,4 @@ VALUES
 ("finance", 80000, 3);
 
 
-INSERT INTO employee (firstName, lastName, roleId, managerId)
-VALUES 
-("aaron", "mendoza", 1, NULL),
-("alexis", "welch", 2, NULL),
-("bob", "levy", 3, NULL);
+

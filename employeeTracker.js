@@ -1,6 +1,7 @@
 const { prompt } = require("inquirer");
 const { printTable } = require("console-table-printer");
 const db = require("./db/db");
+const connection = require("./db/connection");
 
 init();
 
@@ -99,43 +100,14 @@ async function viewEmployees() {
   mainMenu();
 }
 
-function viewDepartments() {
-  connection.query("SELECT dept_name FROM department", (err, res) => {
-    if (err) throw err;
+async function viewDepartments() {
+  const department = await db.findDepartments();
+  console.log("\n");
+  printTable(department);
 
-    inquirer
-      .prompt([
-        {
-          type: "rawlist",
-          message: "For which department do you wish to obtain info?",
-          choices() {
-            const deptArray = [];
-            res.forEach(({ dept_name }) => {
-              deptArray.push(dept_name);
-            });
-            return deptArray;
-          },
-          name: "deptChoice",
-        },
-      ])
-      .then((response) => {
-        //query DB for relevant results to display
-        connection.query(
-          `SELECT first_name, last_name, title, MANAGER_ID, salary, dept_name FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE dept_name = "${response.deptChoice}"`,
-          (err, res) => {
-            if (err) throw err;
-            const table = cTable.getTable(res);
-            console.log(table);
-
-            mainMenu();
-          }
-        );
-      });
-  });
+  mainMenu();
 }
-function viewRoles() {
-  inquirer.prompt();
-}
+function viewRoles() {}
 
 //Add departments, roles, employees
 function addDepartments() {

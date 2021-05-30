@@ -7,11 +7,9 @@ CREATE TABLE employee (
     firstName VARCHAR(30),
     lastName VARCHAR(30),
     roleId INTEGER UNSIGNED NOT NULL, 
-    INDEX roleIndex(roleId),
-    CONSTRAINT FKrole FOREIGN KEY(roleId) REFERENCES role(id) ON DELETE CASCADE,
-    managerId INTEGER UNSIGNED,
-    INDEX managerIndex(managerId),
-    CONSTRAINT FKmanager FOREIGN KEY(managerId) REFERENCES employee(id) ON DELETE SET NULL
+
+    managerId INTEGER UNSIGNED
+    
 );
 
 
@@ -31,4 +29,3 @@ CREATE TABLE role (
     CONSTRAINT FKdepartment FOREIGN KEY(departmentId) REFERENCES department(id) ON DELETE CASCADE
 
 );
-
