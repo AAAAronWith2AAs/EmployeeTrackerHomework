@@ -17,6 +17,7 @@ class DB {
     );
   }
   createRoles(role) {}
+
   findDepartments() {
     return this.connection.query(
       "SELECT department.id, department.name, SUM(role.salary) AS department_budget FROM department LEFT JOIN role on role.departmentId = department.id LEFT JOIN employee ON employee.roleId = role.id GROUP BY department.id, department.name;"
