@@ -107,7 +107,13 @@ async function viewDepartments() {
 
   mainMenu();
 }
-function viewRoles() {}
+async function viewRoles() {
+  const role = await db.findRoles();
+  console.log("\n");
+  printTable(role);
+
+  mainMenu();
+}
 
 //Add departments, roles, employees
 function addDepartments() {
